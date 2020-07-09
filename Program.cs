@@ -13,6 +13,22 @@ class Student
 
 }
 
+class Professor
+{
+    string subject;
+    Human professorData;
+
+    public void AddBook(string _title, string _author)
+    {
+
+    }
+
+    public void AddMark(Student _student, int [] marks)
+    {
+
+    }
+}
+
 class Admin
 {
     Human H;

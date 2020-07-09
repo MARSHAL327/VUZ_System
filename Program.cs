@@ -8,22 +8,39 @@ struct Human
     public char gender;
 }
 
-class Student
+class Mark
 {
 
 }
 
-class Admin
+class StudyingStaff
 {
-    Human H;
+
+}
+
+class Student : StudyingStaff
+{
+    string group;
+    char formOfTraining;
+    Human studentData;
+    Mark allMarks;
+
+    public void ShowMarks(string _subject)
+    {
+
+    }
+}
+
+class Admin : StudyingStaff
+{
+    Human adminData;
     List<string> allNews = new List<string>();
-    List<Student> allStudents;
 
     public Admin(string _fio, int _age, char _gender)
     {
-        H.fio = _fio;
-        H.age = _age;
-        H.gender = _gender;
+        adminData.fio = _fio;
+        adminData.age = _age;
+        adminData.gender = _gender;
     }
 
     public void AddNews(string newNews)

@@ -8,9 +8,25 @@ struct Human
     public char gender;
 }
 
+struct AllMarks
+{
+    string subject;
+    List<int> Marks;
+}
+
 class Mark
 {
+    List<AllMarks> allSubjects = new List<AllMarks>();
 
+    public void AddMarks(Student _student, int [] _marks)
+    {
+
+    }
+
+    public void ShowMarks(Student _student, string _subject)
+    {
+
+    }
 }
 
 class StudyingStaff
@@ -18,7 +34,7 @@ class StudyingStaff
 
 }
 
-class Professor
+class Professor : StudyingStaff
 {
     string subject;
     Human professorData;
@@ -28,7 +44,7 @@ class Professor
 
     }
 
-    public void AddMark(Student _student, int [] marks)
+    public void AddMark(Student _student, int [] _marks)
     {
 
     }
@@ -41,9 +57,21 @@ class Student : StudyingStaff
     Human studentData;
     Mark allMarks;
 
+    public Student(string _fio, int _age, char _gender)
+    {
+        studentData.fio = _fio;
+        studentData.age = _age;
+        studentData.gender = _gender;
+    }
+
     public void ShowMarks(string _subject)
     {
 
+    }
+
+    public Human GetStudentData()
+    {
+        return studentData;
     }
 }
 
@@ -51,6 +79,7 @@ class Admin : StudyingStaff
 {
     Human adminData;
     List<string> allNews = new List<string>();
+    List<Student> allStudents = new List<Student>();
 
     public Admin(string _fio, int _age, char _gender)
     {
@@ -64,14 +93,24 @@ class Admin : StudyingStaff
         allNews.Add(newNews);
     }
 
-    public void ShowStudentList(Student students)
+    public void ShowStudentList()
     {
+        Console.WriteLine("Имя студента   |  возраст   |  пол");
 
+        foreach (Student student in allStudents)
+        {
+            Console.WriteLine(
+                student.GetStudentData().fio + "     " + 
+                student.GetStudentData().age + "     " +
+                student.GetStudentData().gender
+                );
+        }
     }
 
     public void AddStudent(string _fio, int _age, char _gender)
     {
-
+        Student newStudent = new Student(_fio, _age, _gender);
+        allStudents.Add(newStudent);
     }
 
     public void GetNews()
@@ -89,11 +128,10 @@ namespace VUZ_System
     {
         static void Main()
         {
+            
             Admin A = new Admin("Alexandr", 18, 'm');
-            A.AddNews("myNews");
-            A.AddNews("newNews");
-            A.AddNews("hello");
-            A.GetNews();
+            A.AddStudent("Denis", 19, 'm');
+            A.ShowStudentList();
         }
     }
 }

@@ -5,19 +5,11 @@ using System.Runtime.InteropServices;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов для изменения сведений,
 // связанные с этой сборкой.
-<<<<<<< HEAD
-[assembly: AssemblyTitle("VUZ_System_copy")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("VUZ_System_copy")]
-=======
 [assembly: AssemblyTitle("VUZ_System")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VUZ_System")]
->>>>>>> origin/master
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -28,11 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID представляет идентификатор typelib, если этот проект доступен из модели COM
-<<<<<<< HEAD
-[assembly: Guid("dbcb2933-e065-4964-9cd1-de7ddfe4f580")]
-=======
 [assembly: Guid("d561c172-725d-40f8-9bae-a7af153e2c8a")]
->>>>>>> origin/master
 
 // Сведения о версии сборки состоят из указанных ниже четырех значений:
 //

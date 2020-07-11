@@ -18,6 +18,42 @@ namespace VUZ_System
         public List<int> Marks;
     }
 
+    struct Book
+    {
+        public string title;
+        public string author;
+        public string subject;
+    }
+
+    class BaseBook
+    {
+        List<Book> allBooks = new List<Book>();
+        Book specificBook;
+
+        public void AddBook(string title, string author, string subject)
+        {
+            specificBook.title = title;
+            specificBook.author = author;
+            specificBook.subject = subject;
+            allBooks.Add(specificBook);
+        }
+
+        public void ShowBook(string _subject)
+        {
+            foreach( Book B in allBooks)
+            {
+                if( B.subject == _subject)
+                {
+                    Console.WriteLine(
+                        specificBook.title + "   " +
+                        specificBook.author + "   " +
+                        specificBook.subject
+                    );
+                }
+            }
+        }
+    }
+
     class Mark
     {
         AllMarks AM;
@@ -53,58 +89,76 @@ namespace VUZ_System
         {
             foreach(AllMarks am in _student.GetAllSubjects())
             {
-                int i = 0;
-                Console.Write(am.subject + ": ");
-                foreach( int marks in am.Marks)
+                if ( am.subject == _subject)
                 {
-                    Console.Write(marks + (am.Marks.Count == ++i ? " " : ", "));
+                    int i = 0;
+                    Console.Write(am.subject + ": ");
+                    foreach (int marks in am.Marks)
+                    {
+                        Console.Write(marks + (am.Marks.Count == ++i ? " " : ", "));
+                    }
+                    Console.WriteLine();
                 }
-                Console.WriteLine();
             }
         }
-
-        /*public List<AllMarks> GetAllSubjects(Student _student)
-        {
-            Console.WriteLine("GetAllSubjects()");
-            foreach (AllMarks am in _student.GetAllMarks().allSubjects)
-            {
-                Console.WriteLine(am.subject);
-                foreach (int marks in am.Marks)
-                {
-                    Console.WriteLine(marks);
-                }
-            }
-            return _student.GetAllMarks().allSubjects;
-        }*/
     }
 
     class StudyingStaff
     {
+        static protected BaseBook StudyingBook = new BaseBook();
+        static protected List<Student> debtor = new List<Student>();
+        Admin A = new Admin();
+
+        public void ShowNews(Admin adminNews)
+        {
+            adminNews.GetNews();
+        }
+
         public void ShowMarks(Student _student, string _subject)
         {
             _student.GetAllMarks().ShowMarks(_student, _subject);
+        }
+
+        public void ShowBook(string _subject)
+        {
+            StudyingBook.ShowBook(_subject);
+        }
+
+        public void ShowDebtors()
+        {
+            A.ShowStudentList(debtor);
         }
     }
 
     class Professor : StudyingStaff
     {
-        string subject;
+        List<string> professorSubjects = new List<string>();
         Human professorData;
         Mark professorMarks;
-        Admin A = new Admin();
 
-        public Professor()
+        public Professor(string _fio, int _age, char _gender, string _subject)
         {
+            professorData.fio = _fio;
+            professorData.age = _age;
+            professorData.gender = _gender;
+            professorSubjects.Add(_subject);
             professorMarks = new Mark();
         }
 
-        public void AddBook(string _title, string _author)
+        public void AddBook(string _title, string _author, string _subject)
         {
-            
+            StudyingBook.AddBook(_title, _author, _subject);
         }
 
         public void AddMark(Student _student, string _subject, int[] _marks)
         {
+            for (int i = 0; i < _marks.Length; i++)
+            {
+                if( _marks[i] < 3)
+                {
+                    debtor.Add(_student);
+                }
+            }
             professorMarks.AddMarks(_student, _subject, _marks);
         }
     }
@@ -134,9 +188,40 @@ namespace VUZ_System
             allMarks = new Mark(this);
         }
 
+        public new void ShowDebtors()
+        {
+            foreach( Student studentDebtor in debtor)
+            {
+                if( this.studentData.fio == studentDebtor.studentData.fio)
+                {
+                    foreach( AllMarks AM in allSubjects)
+                    {
+                        string debtorSubject = "";
+                        foreach ( int mark in AM.Marks)
+                        {
+                            if (mark < 3)
+                            {
+                                debtorSubject = AM.subject;
+                            }
+                        }
+
+                        if (debtorSubject != "") {
+                            int i = 0;
+                            Console.WriteLine(debtorSubject + ": ");
+                            foreach (int mark in AM.Marks)
+                            {
+                                Console.Write(mark + (AM.Marks.Count == ++i ? " " : ", "));
+                            }
+                        } else Console.WriteLine("Долгов нет");
+                        
+                    }
+                }
+            }
+        }
+
         public void ShowMarks(string _subject)
         {
-
+            allMarks.ShowMarks(this, _subject);
         }
 
         public Human GetStudentData()
@@ -163,11 +248,6 @@ namespace VUZ_System
         {
             return allSubjects;
         }
-
-        /*public void SetAllMarks(AllMarks _AM, Student _student)
-        {
-            _student.allMarks.GetAllSubjects(_student).Add(_AM);
-        }*/
     }
 
     class Admin
@@ -201,16 +281,14 @@ namespace VUZ_System
 
         public void AddStudent(string _fio, int _age, char _gender, string _group, char _formOfTraining)
         {
-            /*Student newStudent = new Student(_fio, _age, _gender, _group, _formOfTraining);
-            newStudent.GetAllMarks();*/
             allStudents.Add(new Student(_fio, _age, _gender, _group, _formOfTraining));
         }
 
-        public void ShowStudentList()
+        public void ShowStudentList(List<Student> studentList)
         {
             Console.WriteLine("Имя студента   |  Возраст   |  Пол   |  Группа   |  Ф/О");
 
-            foreach (Student student in allStudents)
+            foreach (Student student in studentList)
             {
                 Console.WriteLine(
                     student.GetStudentData().fio + "     " +
@@ -242,37 +320,40 @@ namespace VUZ_System
     {
         static void Main()
         {
-            Professor P = new Professor();
+            Professor P = new Professor("Забаштанский", 33, 'м', "ООП");
             Admin A = new Admin("Alexandr", 18, 'm');
+            List<Student> AllStudents = A.GetAllStudents();
+
             A.AddSubject("математика");
             A.AddSubject("ООП");
             A.AddStudent("Denis", 19, 'м', "ПИ/б-18-1-о", 'о');
             A.AddStudent("Александр", 19, 'м', "ПИ/б-18-1-о", 'о');
-            
+            P.AddBook("Первая книга", "Я", "ООП");
+            P.ShowBook("ООП");
+            P.ShowNews(A);
+
 
             while (true)
             {
-                A.ShowStudentList();
-
+                A.ShowStudentList(AllStudents);
+                
                 string specificStudent = Console.ReadLine();
-                foreach (Student student in A.GetAllStudents())
+                foreach (Student student in AllStudents)
                 {
-                    student.GetAllMarks();
                     if (specificStudent == student.GetStudentData().fio)
                     {
-                        //student.GetAllMarks();
                         P.AddMark(student, "математика", new int[] { 2, 3 });
                         P.AddMark(student, "ООП", new int[] { 4, 5, 3 });
                         P.AddMark(student, "математика", new int[] { 4 });
                     }
                 }
-
+                P.ShowDebtors();
                 string specificStudent2 = Console.ReadLine();
-                foreach (Student student in A.GetAllStudents())
+                foreach (Student student in AllStudents)
                 {
                     if (specificStudent2 == student.GetStudentData().fio)
                     {
-                        P.ShowMarks(student, "математика");
+                        P.ShowMarks(student, "ООП");
                     }
                 }
             }
